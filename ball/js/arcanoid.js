@@ -1,5 +1,6 @@
 document.onreadystatechange = function () {
   if (document.readyState === 'complete') {
+    const retryButton = document.getElementById('retry')
     const brickSound = document.getElementById('brick')
     const gameOver = document.getElementById('gameOver')
     const win = document.getElementById('win')
@@ -27,7 +28,7 @@ document.onreadystatechange = function () {
     let gameStatus = 1
     const gameResult = document.getElementById('result')
 
-    var bricks = []
+    const bricks = []
     for (let c = 0; c < brickColumnCount; c++) {
       bricks[c] = []
       for (let r = 0; r < brickRowCount; r++) {
@@ -37,19 +38,22 @@ document.onreadystatechange = function () {
 
     document.addEventListener('keydown', keyDownHandler, false)
     document.addEventListener('keyup', keyUpHandler, false)
-    ball.addEventListener('click', clickHandler, false)
+    fakeBall.addEventListener('click', clickHandler, false)
+    retryButton.addEventListener('click', () => {
+      document.location.reload()
+    })
 
     function collisionDetection () {
-      for (var c = 0; c < brickColumnCount; c++) {
-        for (var r = 0; r < brickRowCount; r++) {
-          var b = bricks[c][r]
+      for (let c = 0; c < brickColumnCount; c++) {
+        for (let r = 0; r < brickRowCount; r++) {
+          const b = bricks[c][r]
           if (b.status) {
             if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
               dy = -dy
               b.status = 0
               score++
-              brick.play()
-              if (score == brickColumnCount * brickRowCount) {
+              brickSound.play()
+              if (score === brickColumnCount * brickRowCount) {
                 win.play()
                 gameStatus = 0
                 gameResult.textContent = 'You Won!My congratulations!'
@@ -142,17 +146,17 @@ document.onreadystatechange = function () {
     }
 
     function keyDownHandler (e) {
-      if (e.key == 'Right' || e.key == 'ArrowRight') {
+      if (e.key === 'Right' || e.key === 'ArrowRight') {
         rightPressed = true
-      } else if (e.key == 'Left' || e.key == 'ArrowLeft') {
+      } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
         leftPressed = true
       }
     }
 
     function keyUpHandler (e) {
-      if (e.key == 'Right' || e.key == 'ArrowRight') {
+      if (e.key === 'Right' || e.key === 'ArrowRight') {
         rightPressed = false
-      } else if (e.key == 'Left' || e.key == 'ArrowLeft') {
+      } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
         leftPressed = false
       }
     }
